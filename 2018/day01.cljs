@@ -1,14 +1,17 @@
+#!/usr/bin/env plk
+
 ;; Solution to AoC 2018 Day 01
-;; Clojure
+;; ClojureScript / planck
 
 (ns aoc.one
   (:require [clojure.string :as string]
-            [clojure.test :refer [deftest is run-tests]]))
+            [clojure.test :refer [deftest is run-tests]]
+            [planck.core :refer [slurp]]))
 
 (def input
   (->> (slurp "inputs/day01.txt")
        (string/split-lines)
-       (map #(Integer/parseInt %))))
+       (map #(js/parseInt %))))
 
 ;; part one
 
