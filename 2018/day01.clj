@@ -1,5 +1,4 @@
 ;; Solution to AoC 2018 Day 01
-;; Clojure
 
 (ns aoc.one
   (:require [clojure.string :as string]
