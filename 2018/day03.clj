@@ -1,4 +1,4 @@
-;; Solution to AoC 2018 Day 01
+;; Solution to AoC 2018 Day 03
 
 (ns aoc.three
   (:require [clojure.string :as string]
