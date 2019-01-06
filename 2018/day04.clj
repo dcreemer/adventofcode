@@ -23,7 +23,7 @@
 
 (defn apply-guard [xs]
   (loop [a xs
-         g (:g (first input))
+         g (:g (first xs))
          res []]
     (let [r (first a)]
       (if-not r
@@ -82,4 +82,3 @@
 (comment
   (run-tests)
   (solve))
-
