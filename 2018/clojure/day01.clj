@@ -12,7 +12,7 @@
 ;; part one
 
 (defn freq-changes [start changes]
-  (reduce #(+ %1 %2) start changes))
+  (reduce #(+ %1 %2) start input))
 
 (deftest test-freq-changes
   (is (= (freq-changes 0 [+1, -2, +3, +1]) 3))
@@ -47,3 +47,9 @@
   (run-tests))
 
 (solve)
+
+
+(defn foo [x]
+  (+ x (first input)))
+
+(foo 6)

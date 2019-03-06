@@ -16,7 +16,7 @@ impl Graph {
     }
 
     fn add(&mut self, a: char, b: char) {
-        let tl = self.edges.entry(b).or_insert(HashSet::new());
+        let tl = self.edges.entry(b).or_insert_with(HashSet::new);
         tl.insert(a);
         self.letters.insert(a);
         self.letters.insert(b);
@@ -31,7 +31,7 @@ impl Graph {
 
     fn finalize(&mut self) {
         for l in self.letters.iter() {
-            self.edges.entry(*l).or_insert(HashSet::new());
+            self.edges.entry(*l).or_insert_with(HashSet::new);
         }
     }
 
@@ -43,7 +43,7 @@ impl Graph {
         let mut r: Vec<char> = self
             .edges
             .iter()
-            .filter_map(|(&f, tl)| if tl.len() == 0 { Some(f) } else { None })
+            .filter_map(|(&f, tl)| if tl.is_empty() { Some(f) } else { None })
             .collect();
         r.sort();
         r
@@ -80,6 +80,7 @@ fn main() {
     println!("Part two: TBD");
 }
 
+#[cfg(test)]
 mod test {
     use super::*;
 
