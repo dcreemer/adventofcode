@@ -32,6 +32,7 @@ impl Graph {
             lt.remove(&c);
         }
         self.edges.remove(&c);
+        self.nodes.remove(&c);
     }
 
     fn len(&self) -> usize {
@@ -50,17 +51,79 @@ impl Graph {
         r
     }
 
-    /// destructively walk the graph and return the nodes
-    /// as a String
-    fn walk(self: &mut Graph) -> String {
-        let mut r: Vec<char> = vec![];
-        while self.len() > 0 {
-            let v = self.frontier();
-            r.push(v[0]);
-            self.remove(v[0]);
+    /// Peek at the next piece of work from the graph, exlucing those
+    /// chars in the given set
+    fn peek_work(self: &Graph, excl: &HashSet<char>) -> Option<char> {
+        let v = self.frontier();
+        if v.len() > 0 {
+            for c in v.iter() {
+                if !excl.contains(&c) {
+                    return Some(*c);
+                }
+            }
         }
-        r.into_iter().collect()
+        None
     }
+
+    /// Pop at the next piece of work from the graph
+    fn pop_work(self: &mut Graph) -> Option<char> {
+        let v = self.frontier();
+        if v.len() > 0 {
+            self.remove(v[0]);
+            Some(v[0])
+        } else {
+            None
+        }
+    }
+}
+
+fn solve_1(g: &mut Graph) -> String {
+    let mut r: Vec<char> = vec![];
+    while let Some(c) = g.pop_work() {
+        r.push(c);
+    }
+    r.into_iter().collect()
+}
+
+fn ordinal(c: char) -> u32 {
+    c.to_digit(36).unwrap() - 10
+}
+
+fn solve_2(g: &mut Graph, wcount: usize, base: u32) -> (String, u32) {
+    let mut result: Vec<char> = vec![];
+    let mut workers: Vec<(char, u32)> = vec![(' ', 0); wcount];
+    let mut active: HashSet<char> = HashSet::new();
+    let mut time: u32 = 0;
+    loop {
+        for i in 0..wcount {
+            let (c, tick) = workers[i];
+            if tick == 0 {
+                // previous work is done!
+                if c >= 'A' && c <= 'Z' {
+                    g.remove(c);
+                    active.remove(&c);
+                    result.push(c);
+                    workers[i] = (' ', 0);
+                }
+                // ready for more work!
+                if let Some(c) = g.peek_work(&active) {
+                    // each worker works for ordinal(c)+base ticks
+                    workers[i] = (c, ordinal(c) + base);
+                    active.insert(c);
+                }
+            } else {
+                // count down:
+                workers[i] = (c, tick - 1);
+            }
+        }
+        // are we done?
+        if g.len() == 0 && active.len() == 0 {
+            break;
+        }
+        // nope; the clock keeps ticking
+        time += 1;
+    }
+    (result.into_iter().collect(), time)
 }
 
 /// Construct a graph from a string of lines in the form
@@ -80,8 +143,10 @@ fn main() {
     println!("AoC 2018 Seven");
     let content: &str = &fs::read_to_string("input.txt").expect("err reading the file");
     let mut g = Graph::from(content);
-    println!("Part one - steps order {}", g.walk());
-    println!("Part two: TBD");
+    println!("Part one - steps order {}", solve_1(&mut g));
+    let mut g = Graph::from(content);
+    let (_r, t) = solve_2(&mut g, 5, 60);
+    println!("Part two - time to solve = {}", t);
 }
 
 #[cfg(test)]
@@ -123,8 +188,22 @@ mod test {
     }
 
     #[test]
-    fn test_walk() {
+    fn test_solve_1() {
         let mut g = test_graph();
-        assert_eq!(g.walk(), "CABDFE");
+        assert_eq!(solve_1(&mut g), "CABDFE");
+    }
+
+    #[test]
+    fn test_ordinal() {
+        assert_eq!(ordinal('A'), 0);
+        assert_eq!(ordinal('Z'), 25);
+    }
+
+    #[test]
+    fn test_solve_2() {
+        let mut g = test_graph();
+        let (r, s) = solve_2(&mut g, 2, 0);
+        assert_eq!(r, "CABFDE");
+        assert_eq!(s, 15);
     }
 }
