@@ -1,6 +1,11 @@
 use std::collections::{HashMap, HashSet};
 use std::fs;
 
+/// A Graph maintain a set of nodes and edges. Nodes represent "work" to do, and
+/// the edges are dependencies between work. Edges are represented as a HashMap
+/// mapping the work that must be done first, to a set of work that follows. So
+/// the edge A->{B, C} means that A must be done before B and C.
+
 #[derive(Debug, PartialEq)]
 struct Graph {
     // edges maps from a node to a set of other nodes
@@ -8,8 +13,8 @@ struct Graph {
     nodes: HashSet<char>,
 }
 
-/// Graph maintain a set of nodes and edges.
 impl Graph {
+    /// Create a new empty Graph
     fn new() -> Graph {
         Graph {
             edges: HashMap::new(),
@@ -17,7 +22,7 @@ impl Graph {
         }
     }
 
-    /// add an edge (and implicitly the nodes)
+    /// add an edge (and implici+tly the nodes)
     fn add(&mut self, a: char, b: char) {
         self.edges.entry(a).or_insert_with(HashSet::new);
         let tl = self.edges.entry(b).or_insert_with(HashSet::new);
@@ -35,8 +40,8 @@ impl Graph {
         self.nodes.remove(&c);
     }
 
-    fn len(&self) -> usize {
-        self.edges.len()
+    fn is_empty(&self) -> bool {
+        self.edges.len() == 0
     }
 
     /// returns the set of all nodes that have no inbound edges
@@ -55,7 +60,7 @@ impl Graph {
     /// chars in the given set
     fn peek_work(self: &Graph, excl: &HashSet<char>) -> Option<char> {
         let v = self.frontier();
-        if v.len() > 0 {
+        if !v.is_empty() {
             for c in v.iter() {
                 if !excl.contains(&c) {
                     return Some(*c);
@@ -68,11 +73,11 @@ impl Graph {
     /// Pop at the next piece of work from the graph
     fn pop_work(self: &mut Graph) -> Option<char> {
         let v = self.frontier();
-        if v.len() > 0 {
+        if v.is_empty() {
+            None
+        } else {
             self.remove(v[0]);
             Some(v[0])
-        } else {
-            None
         }
     }
 }
@@ -117,7 +122,7 @@ fn solve_2(g: &mut Graph, wcount: usize, base: u32) -> (String, u32) {
             }
         }
         // are we done?
-        if g.len() == 0 && active.len() == 0 {
+        if g.is_empty() && active.is_empty() {
             break;
         }
         // nope; the clock keeps ticking
