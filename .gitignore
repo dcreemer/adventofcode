@@ -3,3 +3,4 @@
 .lein-*
 .nrepl-port
 2018/rust/*/target
+2020/rust/*/target
