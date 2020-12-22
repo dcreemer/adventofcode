@@ -1,11 +1,12 @@
 // solution to
 // https://adventofcode.com/2020/day/18
 
+use anyhow::{anyhow, Result};
 use lazy_static::lazy_static;
 use regex::Regex;
-use std::fs;
+use std::iter::Peekable;
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Debug, PartialEq)]
 enum Token {
     Number(i64),
     Mult,
@@ -14,125 +15,150 @@ enum Token {
     Close,
 }
 
-impl Copy for Token {}
-
-fn parse(data: &str) -> Vec<Token> {
+// parse text into Tokens
+fn parse(data: &str) -> Result<Vec<Token>> {
     lazy_static! {
         static ref RE: Regex = Regex::new(r"(\d+)|\+|\*|\(|\)").unwrap();
     }
-    let mut result = vec![];
-    for mat in RE.find_iter(data) {
-        match mat.as_str() {
-            "(" => result.push(Token::Open),
-            ")" => result.push(Token::Close),
-            "+" => result.push(Token::Add),
-            "*" => result.push(Token::Mult),
-            s => {
-                if let Ok(v) = s.parse::<i64>() {
-                    result.push(Token::Number(v))
-                } else {
-                    panic!("bad token!");
-                }
+    let result = RE
+        .find_iter(data)
+        .map(|m| match m.as_str() {
+            "(" => Ok(Token::Open),
+            ")" => Ok(Token::Close),
+            "+" => Ok(Token::Add),
+            "*" => Ok(Token::Mult),
+            s => s.parse::<i64>().map(|v| Token::Number(v)),
+        })
+        .collect::<Result<Vec<_>, _>>()?;
+    Ok(result)
+}
+
+// part 1
+
+// EXPR1 = TERM1 ('+' | '*') TERM1 [('+' | '*') TERM1 ...]
+fn eval_expr1(mut tokens: &mut Peekable<std::slice::Iter<Token>>) -> Result<i64> {
+    let mut acc = eval_term1(&mut tokens)?;
+    loop {
+        match tokens.peek() {
+            Some(Token::Add) => {
+                let _ = tokens.next();
+                let rhs = eval_term1(&mut tokens)?;
+                acc += rhs;
+            }
+            Some(Token::Mult) => {
+                let _ = tokens.next();
+                let rhs = eval_term1(&mut tokens)?;
+                acc *= rhs;
+            }
+            _ => {
+                return Ok(acc);
             }
         }
     }
-    result
 }
 
-// destructively replace additions Num + Num with Num
-// return true if anything is replaced
-fn eval_adds(tokens: &mut Vec<Token>) -> bool {
-    if let Some(idx) = tokens.iter().position(|x| *x == Token::Add) {
-        if idx + 1 < tokens.len() {
-            let mut r = false;
-            let mut val = 0;
-            if let (Token::Number(lhs), Token::Number(rhs)) = (&tokens[idx - 1], &tokens[idx + 1]) {
-                r = true;
-                val = lhs + rhs;
+// TERM1 = NUM | '(' EXPR1 ')'
+fn eval_term1(mut tokens: &mut Peekable<std::slice::Iter<Token>>) -> Result<i64> {
+    match tokens.next() {
+        Some(Token::Number(v)) => Ok(*v),
+        Some(Token::Open) => {
+            let v = eval_expr1(&mut tokens)?;
+            if tokens.next() != Some(&Token::Close) {
+                Err(anyhow!("Expected ')'"))
+            } else {
+                Ok(v)
             }
-            if r {
-                tokens.remove(idx - 1);
-                tokens.remove(idx - 1);
-                tokens.remove(idx - 1);
-                tokens.insert(idx - 1, Token::Number(val));
-                return true;
-            }
-        } else {
-            panic!("bad expr");
         }
+        Some(t) => Err(anyhow!("unexpected token {:?}", t)),
+        None => Err(anyhow!("unexpected end")),
     }
-    return false;
-}
-
-// evaluate a string of Num .. op .. Num .. Ops left to right
-fn eval_op_expr(tokens: &[Token], p2: bool) -> i64 {
-    let mut tok2 = tokens.iter().map(|t| t.clone()).collect();
-    let toks = if p2 {
-        while eval_adds(&mut tok2) {}
-        &tok2
-    } else {
-        tokens
-    };
-    let mut acc;
-    let mut idx;
-    if let Token::Number(v) = toks[0] {
-        acc = v;
-        idx = 1;
-    } else {
-        panic!("expr must start with number!");
-    }
-    while idx < toks.len() {
-        if let (op, Token::Number(rhs)) = (&toks[idx], &toks[idx + 1]) {
-            match op {
-                Token::Add => acc += rhs,
-                Token::Mult => acc *= rhs,
-                _ => panic!("bad op"),
-            }
-            idx += 2;
-        }
-    }
-    acc
-}
-
-// find the innermost parenthetical exression, and replace the contents
-// with evaluation of it. Return true if one is found
-fn eval_inner(tokens: &mut Vec<Token>, p2: bool) -> bool {
-    let mut o = 0;
-    let mut idx = 0;
-    while idx < tokens.len() {
-        if tokens[idx] == Token::Open {
-            o = idx;
-        } else if tokens[idx] == Token::Close {
-            // replace o -> c
-            let v = eval_op_expr(&tokens[o + 1..idx], p2);
-            let mut i = 0;
-            tokens.retain(|_| (i < o || i > idx, i += 1).0);
-            tokens.insert(o, Token::Number(v));
-            return true;
-        }
-        idx += 1;
-    }
-    false
-}
-
-fn eval_expr(data: &str, p2: bool) -> i64 {
-    let mut tokens = parse(data);
-    while eval_inner(&mut tokens, p2) {}
-    eval_op_expr(&tokens, p2)
 }
 
 fn part_1(data: &str) -> i64 {
-    data.lines().map(|l| eval_expr(l, false)).sum()
+    if let Ok(v) = data
+        .lines()
+        .map(|line| {
+            let parsed = parse(line)?;
+            let mut p = parsed.iter().peekable();
+            eval_expr1(&mut p)
+        })
+        .collect::<Result<Vec<_>>>()
+    {
+        v.iter().sum()
+    } else {
+        panic!("no");
+    }
+}
+
+// part 2
+
+// Sum = Product '+' Product
+fn eval_sum(mut tokens: &mut Peekable<std::slice::Iter<Token>>) -> Result<i64> {
+    let mut acc = eval_term2(&mut tokens)?;
+    loop {
+        if let Some(Token::Add) = tokens.peek() {
+            let _ = tokens.next();
+            let rhs = eval_term2(&mut tokens)?;
+            acc += rhs;
+        } else {
+            return Ok(acc);
+        }
+    }
+}
+
+// Product = (Sum | Term) '*' Term
+fn eval_product(mut tokens: &mut Peekable<std::slice::Iter<Token>>) -> Result<i64> {
+    let mut acc = eval_sum(&mut tokens)?;
+    loop {
+        if let Some(Token::Mult) = tokens.peek() {
+            let _ = tokens.next();
+            let rhs = eval_sum(&mut tokens)?;
+            acc *= rhs;
+        } else {
+            return Ok(acc);
+        }
+    }
+}
+
+// TERM2 = Num | '(' Product ')'
+fn eval_term2(mut tokens: &mut Peekable<std::slice::Iter<Token>>) -> Result<i64> {
+    match tokens.next() {
+        Some(Token::Number(v)) => Ok(*v),
+        Some(Token::Open) => {
+            let v = eval_product(&mut tokens)?;
+            if tokens.next() != Some(&Token::Close) {
+                Err(anyhow!("Expected ')'"))
+            } else {
+                Ok(v)
+            }
+        }
+        Some(t) => Err(anyhow!("unexpected token {:?}", t)),
+        None => Err(anyhow!("unexpected end")),
+    }
 }
 
 fn part_2(data: &str) -> i64 {
-    data.lines().map(|l| eval_expr(l, true)).sum()
+    if let Ok(v) = data
+        .lines()
+        .map(|line| {
+            let parsed = parse(line)?;
+            let mut p = parsed.iter().peekable();
+            eval_product(&mut p)
+        })
+        .collect::<Result<Vec<_>>>()
+    {
+        v.iter().sum()
+    } else {
+        panic!("no");
+    }
 }
 
-fn main() {
-    let contents = fs::read_to_string("input.txt").expect("err reading the file");
+fn main() -> Result<()> {
+    let contents = include_str!("../input.txt");
     println!("part 1 = {}", part_1(&contents));
     println!("part 2 = {}", part_2(&contents));
+
+    Ok(())
 }
 
 #[cfg(test)]
