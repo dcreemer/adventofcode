@@ -32,4 +32,4 @@ def test_navigate_two() -> None:
 
 def test_part_two() -> None:
     commands = parse_input(input)
-    assert part_two_calc(commands) == 2
+    assert part_two_calc(commands) == 900
