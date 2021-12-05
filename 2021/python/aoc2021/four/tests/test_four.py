@@ -52,4 +52,4 @@ def test_part_one() -> None:
 
 def test_part_two() -> None:
     nums, cards = parse_input(input)
-    part_one_calc(nums, cards) == 1924
+    part_two_calc(nums, cards) == 1924
