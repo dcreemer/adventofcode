@@ -11,8 +11,11 @@ format-check:
 
 check: code-check format-check
 
-run-one:
+run:
 	poetry run one
+	poetry run two
+	poetry run three
+	poetry run four
 
 clean:
 	rm -rf .pytest_cache -rf .mypy_cache
