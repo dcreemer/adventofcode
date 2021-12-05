@@ -21,6 +21,8 @@ safety = "^1.10"
 
 [tool.poetry.scripts]
 one = "aoc2021.one.one:main"
+two = "aoc2021.two.two:main"
+three = "aoc2021.three.three:main"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
