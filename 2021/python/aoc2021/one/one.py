@@ -1,10 +1,10 @@
 # main program for day one
 
-def part_one() -> None:
+def part_one() -> int:
     """
     part one of day one
     """
-    return None
+    return 1
 
 
 def main() -> None:
