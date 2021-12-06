@@ -25,6 +25,7 @@ two = "aoc2021.two.two:main"
 three = "aoc2021.three.three:main"
 four = "aoc2021.four.four:main"
 five = "aoc2021.five.five:main"
+six = "aoc2021.six.six:main"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
