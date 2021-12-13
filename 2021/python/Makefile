@@ -24,6 +24,7 @@ run:
 	poetry run ten
 	poetry run eleven
 	poetry run twelve
+	poetry run thirteen
 
 clean:
 	rm -rf .pytest_cache -rf .mypy_cache
