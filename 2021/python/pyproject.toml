@@ -5,7 +5,7 @@ description = ""
 authors = ["David Creemer <david@zachary.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.10"
 pydantic = "^1.8.2"
 
 [tool.poetry.dev-dependencies]
@@ -34,6 +34,7 @@ ten = "aoc2021.ten.ten:main"
 eleven = "aoc2021.eleven.eleven:main"
 twelve = "aoc2021.twelve.twelve:main"
 thirteen = "aoc2021.thirteen.thirteen:main"
+fourteen = "aoc2021.fourteen.fourteen:main"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
