@@ -1,7 +1,8 @@
 # AoC 2021 day Fourteen
 
 from collections import Counter, defaultdict
-from itertools import pairwise
+# itertools pairwise is in Python 3.10+, but mypy doesn't know about it yet
+from itertools import pairwise  # type: ignore
 from typing import DefaultDict, Tuple
 
 from ..lib.input import read_raw_input_data
