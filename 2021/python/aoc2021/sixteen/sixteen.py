@@ -56,7 +56,6 @@ def consume_literal(data: str) -> Tuple[int, str]:
         more, data = consume(data, 1)
         b4, data = consume(data, 4)
         val.append(b4)
-    _ = consume(data, 3)
     return (int("".join(val), 2), data)
 
 
