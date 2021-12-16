@@ -35,6 +35,7 @@ eleven = "aoc2021.eleven.eleven:main"
 twelve = "aoc2021.twelve.twelve:main"
 thirteen = "aoc2021.thirteen.thirteen:main"
 fourteen = "aoc2021.fourteen.fourteen:main"
+fifteen = "aoc2021.fifteen.fifteen:main"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
