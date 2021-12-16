@@ -40,8 +40,7 @@ def hex_to_bin(hex_str: str) -> str:
     return "".join([hmap[c] for c in hex_str])
 
 
-def consume(input: str, chars: int) -> Tuple[str, str]:
-    return (input[0:chars], input[chars:])
+def consume(input: str, bits: int) -> Tuple[str, str]:
 
 
 def consume_int(data: str, bits: int) -> Tuple[int, str]:
