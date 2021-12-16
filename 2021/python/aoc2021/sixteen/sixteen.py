@@ -41,6 +41,7 @@ def hex_to_bin(hex_str: str) -> str:
 
 
 def consume(input: str, bits: int) -> Tuple[str, str]:
+    return (input[0:bits], input[bits:])
 
 
 def consume_int(data: str, bits: int) -> Tuple[int, str]:
