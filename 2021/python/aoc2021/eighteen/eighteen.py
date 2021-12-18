@@ -1,5 +1,10 @@
 # AoC 2021 day Eighteen
 
+# I struggled with how to implement explode on this one, and still don't like it.
+# this splode structure is adapted from a hint on Reddit. What would be nice is
+# to find a "regex"-like language for finding patterns in these trees, and using
+# that to express what I'm looking for and what I want to modify.
+
 import json
 import math
 from functools import reduce
