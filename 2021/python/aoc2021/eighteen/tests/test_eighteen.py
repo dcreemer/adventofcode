@@ -1,14 +1,7 @@
 # tests for day Eighteen
 
-from ..eighteen import (
-    add,
-    explode,
-    magnitude,
-    parse_input,
-    part_one_calc,
-    part_two_calc,
-    split
-)
+from ..eighteen import (add, explode, magnitude, parse_input, part_one_calc,
+                        part_two_calc, split)
 
 input = """
 [[[0,[5,8]],[[1,7],[9,6]]],[[4,[1,2]],[[1,4],2]]]
