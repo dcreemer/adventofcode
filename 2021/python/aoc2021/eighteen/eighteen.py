@@ -104,7 +104,7 @@ def split(n: Number) -> Tuple[Number, bool]:
 
 
 def add(lhs: Number, rhs: Number) -> Number:
-    num = [lhs, rhs]
+    num: Number = [lhs, rhs]
     # reduce the number according to the Day 18 rules
     changed = True
     while changed:
@@ -123,7 +123,8 @@ def magnitude(e: Number) -> int:
 
 
 def part_one_calc(data: list[Number]) -> int:
-    return magnitude(reduce(add, data, 0))
+    init: Number = 0
+    return magnitude(reduce(add, data, init))
 
 
 def part_two_calc(data: list[Number]) -> int:
