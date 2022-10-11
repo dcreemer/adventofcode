@@ -7,6 +7,7 @@ authors = ["David Creemer <david@zachary.com>"]
 [tool.poetry.dependencies]
 python = "^3.10"
 pydantic = "^1.8.2"
+tqdm = "^4.62.3"
 
 [tool.poetry.dev-dependencies]
 autopep8 = "^1.5"
@@ -42,6 +43,7 @@ eighteen = "aoc2021.eighteen.eighteen:main"
 nineteen = "aoc2021.nineteen.nineteen:main"
 twenty = "aoc2021.twenty.twenty:main"
 twentyone = "aoc2021.twentyone.twentyone:main"
+twentytwo = "aoc2021.twentytwo.twentytwo:main"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
