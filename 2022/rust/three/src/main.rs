@@ -1,7 +1,7 @@
 // solution to
 // https://adventofcode.com/2022/day/3
 
-use itertools::{izip};
+use itertools::izip;
 use std::collections::HashSet;
 use std::fs;
 
@@ -42,6 +42,8 @@ fn part_1(data: &str) -> i64 {
         .sum()
 }
 
+// intersect multiple sets. Adapted from:
+// https://github.com/rust-lang/rfcs/issues/2023
 fn intersect_all(packs: &[Pack]) -> Pack {
     packs
     .iter()
