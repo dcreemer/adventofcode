@@ -1,5 +1,5 @@
 test:
-	poetry run pytest -v .
+	poetry run pytest -v aoc2023/three
 
 code-check:
 	-poetry run mypy aoc2023
@@ -10,8 +10,7 @@ format-check:
 	-poetry run ruff format --diff .
 
 run:
-	# poetry run python aoc2023/one/main.py
-	poetry run python aoc2023/two/main.py
+	poetry run python aoc2023/three/main.py
 
 clean:
 	rm -rf htmlcov
