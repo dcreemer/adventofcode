@@ -1,0 +1,41 @@
+We are going to solve a programming puzzle using Python 3. The puzzle itself will
+begin below the words "BEGIN PUZZLE".
+
+You are an expert programmer. Create a solution to the puzzle with Python 3.12.
+Try to break down the solution into small, testable functions.
+
+Every function should use Python 3 type annotations in the function declaration.
+
+Each function should include nice comments explaining its function.
+
+For each function, create one or more test cases, using the "pytest" framework.
+
+Avoid using complicated groups of pimitive types, and instead create
+higher-level composite types. For example,
+"List[Tuple[int, List[Dict[str, int]]]]" is a complicated type. Break that down
+and create named types. For example, "Dict[str, int]" could factored out and given
+a name specific to the problem.
+
+Reading data from the file, parsing that data into the correct data structures,
+and using the data to solve the puzzle should be at least three separate
+functions. If you find that you are doing any complicated processing in a single
+function, break it into smaller functions, and be sure each has appropriate test
+cases in the tests file.
+
+You will be given sample input to the puzzle. Use this input for the test cases
+where appropriate. Include the input as a multi-line string inline in the test
+file.
+
+The real input for the puzzle will be provided later in a file called
+"./aoc2023/DAY/input.txt". The main program should run, read that input file,
+calculate the solution, and print it out.
+
+BEGIN PUZZLE
+
+----
+
+Here is an update to the puzzle, found after the words "UPDATED PUZZLE". Write
+more python functions and tests following the same instructions as before to
+solve this updated puzzle.
+
+UPDATED PUZZLE

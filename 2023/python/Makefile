@@ -10,7 +10,8 @@ format-check:
 	-poetry run ruff format --diff .
 
 run:
-	poetry run python aoc2023/one/main.py
+	# poetry run python aoc2023/one/main.py
+	poetry run python aoc2023/two/main.py
 
 clean:
 	rm -rf htmlcov
