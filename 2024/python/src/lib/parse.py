@@ -1,16 +1,18 @@
 # AoC library functions
 
-import pathlib
 from collections.abc import Sequence
 
 
-def read_file_to_lines(src: pathlib.Path) -> list[str]:
-    with src.open() as f:
-        return f.readlines()
+def strip_lines(src: str) -> list[str]:
+    """
+    read a data file into lines, stripping whitespace and empty lines
+    """
+    return [line for line in [y.strip() for y in src.split("\n")] if line]
 
 
 def parse_list_to_ints(src: Sequence[str]) -> Sequence[int]:
     """
-    parse a list of strings into a list of integers
+    Parse a list of strings into a list of integers.
+    Ignore blank linkes and all trailing or leading whitespace.
     """
-    return [int(x.strip()) for x in src if x.strip()]
+    return [int(x) for x in [y.strip() for y in src] if x]
