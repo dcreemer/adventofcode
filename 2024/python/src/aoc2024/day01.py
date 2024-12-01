@@ -2,5 +2,16 @@
 
 DAY = "01"
 
-def main() -> None:
+
+def part_1() -> None:
     pass
+
+
+def part_2() -> None:
+    pass
+
+
+def main() -> None:
+    print("Advent of Code Day", DAY)
+    part_1()
+    part_2()

@@ -77,5 +77,8 @@ warn_no_return = true
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
+[tool.hatch.build]
+include = ["/src/aoc2024/py.typed"]
+
 [tool.hatch.build.targets.wheel]
 packages = ["src/aoc2024"]
