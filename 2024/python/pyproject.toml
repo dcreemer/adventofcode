@@ -1,0 +1,81 @@
+[project]
+name = "aoc2024"
+version = "0.1.0"
+description = "Advent of Code 2024 Solutions"
+readme = "README.md"
+license = { text = "CC0 1.0 Universal" }
+requires-python = ">=3.12"
+authors = [{ name = "David Creemer" }]
+urls.Homepage = "https://github.com/dcreemer/adventofcode"
+
+dependencies = []
+
+[tool.uv]
+prerelease = "allow"
+dev-dependencies = [
+  "bandit>=1.7.10",
+  "pip-audit>=2.7.3",
+  "pytest>=8.3.2",
+  "pytest-cov>=5.0.0",
+  "mypy>=1.10.0",
+  "ruff>=0.3.5",
+]
+
+[tool.pytest.ini_options]
+addopts = "--cov=aoc2024 --cov-report html --cov-report term"
+
+[tool.ruff]
+line-length = 105
+src = ["src", "tests"]
+lint.select = [
+  "B",   # bugbear
+  "C4",  # comprehensions
+  "C90", # mccabe
+  "DTZ", # datetimez
+  "E",   # pycodestyle
+  "EXE", # executable
+  "F",   # pyflakes
+  "I",   # isort
+  "INT", # gettext
+  "N",   # pep8 naming
+  "PIE", # pie
+  "PLC", # pylint convention
+  "PLE", # pylint errors
+  "PT",  # pytest style
+  "PTH", # use-pathlib
+  "Q",   # quotes
+  "RSE", # flake8-raise
+  "RUF", # ruff
+  "S",   # bandit
+  "SIM", # simplify
+  "UP",  # pyupgrade
+  "UP",  # pyupgrade
+  "W",   # Warnings
+]
+lint.typing-modules = ["typings"]
+
+[tool.ruff.lint.per-file-ignores]
+"**/tests/*.py" = ["S101"] # do not warn on asserts
+
+[tool.ruff.lint.mccabe]
+max-complexity = 8
+
+[tool.coverage.run]
+branch = true
+parallel = true
+source = ["src"]
+
+[tool.mypy]
+python_version = "3.12"
+mypy_path = "$MYPY_CONFIG_FILE_DIR/typings"
+strict = true
+warn_return_any = true
+warn_unreachable = true
+warn_no_return = true
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/aoc2024"]
