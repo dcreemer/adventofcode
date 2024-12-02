@@ -19,12 +19,12 @@ def test_pair_of_lists() -> None:
     assert list_2 == [4, 3, 5, 3, 9, 3]
 
 
-def test_part_1():
+def test_part_1() -> None:
     result = day01.part_1(parse.strip_lines(sample_input))
     assert result == 11
 
 
-def test_part_2():
+def test_part_2() -> None:
     result = day01.part_2(parse.strip_lines(sample_input))
     assert result == 31
 
