@@ -1,6 +1,8 @@
 # unittest for the calculate module
 
-from ..parse import parse_list_to_int_matrix, parse_list_to_ints, strip_lines
+from typing import cast
+
+from ..parse import StringList, parse_list_to_int_matrix, parse_list_to_ints, strip_lines
 
 
 def test_strip_lines() -> None:
@@ -10,7 +12,7 @@ def test_strip_lines() -> None:
     3   
     4   
     """  # noqa
-    assert strip_lines(src) == ["1", "2", "3", "4"]
+    assert strip_lines(src) == cast(StringList, ["1", "2", "3", "4"])
 
 
 def test_int_lists() -> None:

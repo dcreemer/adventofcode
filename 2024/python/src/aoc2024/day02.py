@@ -1,6 +1,7 @@
 # AoC 2024 Day 02 Solution
 
 from lib import files, parse
+from lib.parse import StringList
 
 DAY = "02"
 INPUT = files.read_to_lines(files.input_file(DAY))
@@ -17,7 +18,7 @@ def is_valid_report(report: list[int]) -> bool:
     )
 
 
-def part_1(lines: list[str]) -> int:
+def part_1(lines: StringList) -> int:
     reports = parse.parse_list_to_int_matrix(lines)
     return sum([1 if is_valid_report(r) else 0 for r in reports])
 
@@ -38,7 +39,7 @@ def is_valid_damped_report(report: list[int]) -> bool:
     return False
 
 
-def part_2(lines: list[str]) -> int:
+def part_2(lines: StringList) -> int:
     reports = parse.parse_list_to_int_matrix(lines)
     return sum([1 if is_valid_damped_report(r) else 0 for r in reports])
 
