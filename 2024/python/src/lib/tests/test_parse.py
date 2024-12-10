@@ -42,3 +42,27 @@ def test_int_matrix() -> None:
         [8, 6, 4, 4, 1],
         [1, 3, 6, 7, 9],
     ]
+
+
+def test_char_matrix() -> None:
+    src = """
+    MMMSXXMASM
+    MSAMXMSMSA
+    AMXSXMAAMM
+    MSAMASMSMX
+    XMASAMXAMM
+    XXAMMXXAMA
+    SMSMSASXSS
+    SAXAMASAAA
+    MAMMMXMMMM
+    MXMXAXMASX
+    """
+    matrix = strip_lines(src)
+    assert len(matrix) == 10  # rows
+    assert len(matrix[0]) == 10  # columns
+    #             Y  X
+    assert matrix[0][0] == "M"
+    assert matrix[0][1] == "M"
+    assert matrix[0][2] == "M"
+    assert matrix[1][1] == "S"
+    assert matrix[2][9] == "M"
