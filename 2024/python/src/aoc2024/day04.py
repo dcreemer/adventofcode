@@ -1,7 +1,5 @@
 # AoC 2024 Day 04 Solution
 
-from ast import Str
-import enum
 from lib import files
 from lib.parse import StringList
 

@@ -19,7 +19,7 @@ def is_valid_report(report: list[int]) -> bool:
 
 
 def part_1(lines: StringList) -> int:
-    reports = parse.parse_list_to_int_matrix(lines)
+    reports = parse.parse_list_to_int_lists(lines, " ")
     return sum([1 if is_valid_report(r) else 0 for r in reports])
 
 
@@ -40,7 +40,7 @@ def is_valid_damped_report(report: list[int]) -> bool:
 
 
 def part_2(lines: StringList) -> int:
-    reports = parse.parse_list_to_int_matrix(lines)
+    reports = parse.parse_list_to_int_lists(lines, " ")
     return sum([1 if is_valid_damped_report(r) else 0 for r in reports])
 
 
